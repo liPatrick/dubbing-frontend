@@ -5,6 +5,13 @@ function Home() {
 
     const [data, setData] = useState(null)
     const [input, setInput] = useState("")
+    const [videoURL, setVideoURL] = useState(null)
+    const [_, forceUpdate] = React.useState()
+    const [isLoading, setIsLoading] = useState(false)
+
+    const reloadHook = () => {
+        forceUpdate(Math.random())
+    }
 
     const divStyle = {
         width: '100%',
@@ -15,17 +22,43 @@ function Home() {
     }
 
     const getAPI = () => {
-        axios.post('https://90c9-2601-645-8001-c130-5900-6a3c-a1f6-be8.ngrok-free.app/b/get/api', {
-            "input": input
+        setIsLoading(true)
+        axios.post('https://90c9-2601-645-8001-c130-5900-6a3c-a1f6-be8.ngrok-free.app/dub', {
+            "video_link": input
         })
             .then((response) => {
                 const res = response.data
-                setData(res)
+                console.log(res)
+                setIsLoading(false)
+                if (res === "success") {
+                    console.log("hereQ")
+                    setVideoURL('https://90c9-2601-645-8001-c130-5900-6a3c-a1f6-be8.ngrok-free.app/video')
+                    reloadHook()
+                }
             })
     }
 
+    // const getVideo = () => {
+    //     fetch('https://90c9-2601-645-8001-c130-5900-6a3c-a1f6-be8.ngrok-free.app/video')
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return response.blob();
+    //         })
+    //         .then(blob => {
+    //             const videoURL = URL.createObjectURL(blob);
+    //             setVideoURL(videoURL);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching video:', error);
+    //         });
+    // };
+
+
+
     return (
-        <div className="flex min-h-screen items-center justify-start bg-white" style={divStyle}>
+        <div className="flex min-h-screen items-start justify-start bg-white pt-16" style={divStyle}>
             <div className="mx-auto w-full max-w-lg">
                 <h1 className="text-center text-4xl font-medium text-transparent bg-clip-text bg-gradient-to-r from-customPurp to-customGreen">Quick Dubber </h1>
                 <p className="mt-3"></p>
@@ -61,9 +94,17 @@ function Home() {
                             Get Dubbed Video
                         </button>
                     </div>
-                    <div className="flex content-center">
-                        {data != null && <div><p>{data.api}</p><p>{data.description}</p></div>}
-                        {/*{data != null && <Tags props={data}/>}*/}
+                    <div className="flex content-center mt-5">
+                        {isLoading ? (
+                            <div>Loading...</div>  // Replace this with your desired loading screen or spinner
+                        ) : (
+                            videoURL && (
+                                <video width="640" height="480" controls>
+                                    <source src={videoURL} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            )
+                        )}
                     </div>
                 </form>
             </div>
