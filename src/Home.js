@@ -32,7 +32,7 @@ function Home() {
                 setIsLoading(false)
                 if (res === "success") {
                     console.log("hereQ")
-                    setVideoURL('https://90c9-2601-645-8001-c130-5900-6a3c-a1f6-be8.ngrok-free.app/video')
+                    setVideoURL('https://b3ac-2601-645-8001-c130-5900-6a3c-a1f6-be8.ngrok-free.app/video')
                     reloadHook()
                 }
             })
